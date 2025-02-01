@@ -1,9 +1,8 @@
-package com.example.examplemod;
+package net.rimrim.rimmod;
 
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
@@ -14,7 +13,7 @@ import net.neoforged.neoforge.common.ModConfigSpec;
 
 // An example config class. This is not required, but it's a good idea to have one to keep your config organized.
 // Demonstrates how to use Neo's config APIs
-// @EventBusSubscriber(modid = ExampleMod.MODID, bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = RimMod.MODID, bus = EventBusSubscriber.Bus.MOD)
 public class Config
 {
     private static final ModConfigSpec.Builder BUILDER = new ModConfigSpec.Builder();
@@ -48,7 +47,7 @@ public class Config
         return obj instanceof String itemName && BuiltInRegistries.ITEM.containsKey(ResourceLocation.parse(itemName));
     }
 
-    // @SubscribeEvent
+    @SubscribeEvent
     static void onLoad(final ModConfigEvent event)
     {
         logDirtBlock = LOG_DIRT_BLOCK.get();

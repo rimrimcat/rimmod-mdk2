@@ -35,7 +35,7 @@ import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 // The value here should match an entry in the META-INF/neoforge.mods.toml file
-@Mod(ExampleMod.MODID)
+// @Mod(ExampleMod.MODID)
 public class ExampleMod
 {
     // Define mod id in a common place for everything to reference
@@ -114,7 +114,7 @@ public class ExampleMod
     }
 
     // You can use SubscribeEvent and let the Event Bus discover methods to call
-    @SubscribeEvent
+    // @SubscribeEvent
     public void onServerStarting(ServerStartingEvent event)
     {
         // Do something when the server starts
@@ -122,10 +122,10 @@ public class ExampleMod
     }
 
     // You can use EventBusSubscriber to automatically register all static methods in the class annotated with @SubscribeEvent
-    @EventBusSubscriber(modid = MODID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+    // @EventBusSubscriber(modid = MODID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
     public static class ClientModEvents
     {
-        @SubscribeEvent
+        // @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event)
         {
             // Some client setup code

@@ -44,11 +44,20 @@ neoForge {
     // These can be tweaked, removed, or duplicated as needed.
     runs {
         client {
+            System.loadLibrary("openbabel_java")
             client()
 
             // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
             systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
         }
+
+//        clientAuth {
+//            client()
+//            devLogin = true
+//
+//            // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
+//            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+//        }
 
         server {
             server()
@@ -87,6 +96,7 @@ neoForge {
             // You can set various levels here.
             // Please read: https://stackoverflow.com/questions/2031163/when-to-use-the-different-log-levels
             logLevel = org.slf4j.event.Level.DEBUG
+
         }
     }
 
@@ -133,6 +143,21 @@ dependencies {
     // For more info:
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
+
+    // Add Openbabel
+//    implementation(files("libs/cdk-2.10.jar"))
+//    additionalRuntimeClasspath(files("libs/cdk-2.10.jar"))
+//    jarJar(implementation("org.openscience.cdk:cdk-bundle:2.9"))
+
+//    compileOnly "org.openscience.cdk:cdk-bundle:2.9"
+//    additionalRuntimeClasspath "org.openscience.cdk:cdk-bundle:2.9"
+
+    compileOnly(files("libs/openbabel.jar"))
+    additionalRuntimeClasspath(files("libs/openbabel.jar"))
+
+//    compileOnly("org.lwjgl:lwjgl:3.3.3")
+//    additionalRuntimeClasspath("org.lwjgl:lwjgl:3.3.3")
+
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.

@@ -1,0 +1,7 @@
+{
+  "item.rimmod.test_item": "Test Item",
+  "item.rimmod.example_item": "Example Item",
+  "block.rimmod.example_block": "Example Block",
+  "block.rimmod.tank": "Tank",
+  "itemGroup.rimmod": "RimMod"
+}

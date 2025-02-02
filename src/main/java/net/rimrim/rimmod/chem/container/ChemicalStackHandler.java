@@ -2,29 +2,41 @@ package net.rimrim.rimmod.chem.container;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.common.util.INBTSerializable;
+import net.rimrim.rimmod.RimMod;
 import net.rimrim.rimmod.chem.Chemicals;
 import net.rimrim.rimmod.chem.enums.VariableType;
-import net.rimrim.rimmod.chem.props.PureSpecies;
+import net.rimrim.rimmod.chem.props.base.AbstractSpecies;
+import net.rimrim.rimmod.init.ModChemicals;
 import org.jetbrains.annotations.UnknownNullability;
 
 public class ChemicalStackHandler implements INBTSerializable<CompoundTag> {
 
     private float volume; // m3
-    private ChemicalStack chemStack = ChemicalStack.EMPTY;
+    private ChemicalStack chemStack;
+    private AbstractSpecies spaceFillingChemical;
 
     // Is closed or not
+    // Implicit that empty handler means filled with air
 
     public ChemicalStackHandler() {
-        this.volume = 1;
+        this(Chemicals.AIR, 1);
     }
 
     public ChemicalStackHandler(float volume) {
+        this(Chemicals.AIR, volume);
+    }
+
+    public ChemicalStackHandler(AbstractSpecies spaceFiller, float volume) {
         this.volume = volume;
+        this.spaceFillingChemical = spaceFiller;
+        this.chemStack = ChemicalStack.EMPTY;
     }
 
     public void setVolume(float volume) {
         this.volume = volume;
+        this.onContentsChanged();
     }
 
     public float getVolume() {
@@ -39,6 +51,7 @@ public class ChemicalStackHandler implements INBTSerializable<CompoundTag> {
         if (this.chemStack.isEmpty()) return;
 
         this.chemStack.addAmount(varType, value);
+        this.onContentsChanged();
     }
 
     public ChemicalStack insertChemical(ChemicalStack otherChemStack, boolean simulate) {
@@ -49,13 +62,19 @@ public class ChemicalStackHandler implements INBTSerializable<CompoundTag> {
 
             // Just set the chemstack to this if Handler is empty
             if (this.chemStack.isEmpty()) {
-                if (!simulate) this.chemStack = otherChemStack;
+                if (!simulate) {
+                    this.chemStack = otherChemStack;
+                    this.onContentsChanged();
+                }
                 return ChemicalStack.EMPTY;
             }
 
             // Add the chemical stack ONLY if same chemical
             if (this.chemStack.is(otherChemStack)) {
-                if (!simulate) this.chemStack.addMass(otherChemStack.m());
+                if (!simulate) {
+                    this.chemStack.addMass(otherChemStack.m());
+                    this.onContentsChanged();
+                }
                 return ChemicalStack.EMPTY;
             } else {
                 // Return if different chemical
@@ -68,13 +87,19 @@ public class ChemicalStackHandler implements INBTSerializable<CompoundTag> {
 
             // Just set the chemstack to this if Handler is empty
             if (this.chemStack.isEmpty()) {
-                if (!simulate) this.chemStack = otherChemStack.copyWithAmount(VariableType.VOLUME, insertableVolume);
+                if (!simulate) {
+                    this.chemStack = otherChemStack.copyWithAmount(VariableType.VOLUME, insertableVolume);
+                    this.onContentsChanged();
+                }
                 return otherChemStack.copyWithAmount(VariableType.VOLUME, excessVolume);
             }
 
             // Add chemical only if same
             if (this.chemStack.is(otherChemStack)) {
-                if (!simulate) this.chemStack.addVolume(insertableVolume);
+                if (!simulate) {
+                    this.chemStack.addVolume(insertableVolume);
+                    this.onContentsChanged();
+                }
                 return otherChemStack.copyWithAmount(VariableType.VOLUME, excessVolume);
             } else {
                 // Return if different chemical
@@ -83,8 +108,8 @@ public class ChemicalStackHandler implements INBTSerializable<CompoundTag> {
         }
     }
 
-    public ChemicalStack extractChemical(PureSpecies chemical, VariableType varType, float value, boolean simulate) {
-        if (this.chemStack.isEmpty() || chemical == Chemicals.NONE) return ChemicalStack.EMPTY;
+    public ChemicalStack extractChemical(AbstractSpecies chemical, VariableType varType, float value, boolean simulate) {
+        if (this.chemStack.isEmpty() || chemical == Chemicals.AIR) return ChemicalStack.EMPTY;
         if (!this.chemStack.is(chemical.name)) return ChemicalStack.EMPTY;
 
         float requestedMass;
@@ -97,12 +122,18 @@ public class ChemicalStackHandler implements INBTSerializable<CompoundTag> {
 
         if (requestedMass < this.chemStack.m()) {
             // Can extract, with some remaining in container
-            if (!simulate) this.chemStack.deductMass(requestedMass);
+            if (!simulate) {
+                this.chemStack.deductMass(requestedMass);
+                this.onContentsChanged();
+            }
             return this.chemStack.copyWithAmount(VariableType.MASS, requestedMass);
         } else {
             // Extract all
             ChemicalStack chemCopy = this.chemStack.copy();
-            if (!simulate) this.chemStack = ChemicalStack.EMPTY;
+            if (!simulate) {
+                this.chemStack = ChemicalStack.EMPTY;
+                this.onContentsChanged();
+            }
             return chemCopy;
         }
     }
@@ -115,12 +146,25 @@ public class ChemicalStackHandler implements INBTSerializable<CompoundTag> {
     }
 
     @Override
-    public @UnknownNullability CompoundTag serializeNBT(HolderLookup.Provider provider) {
-        return null;
+    public CompoundTag serializeNBT(HolderLookup.Provider provider) {
+        return this.chemStack.save(provider);
     }
 
     @Override
     public void deserializeNBT(HolderLookup.Provider provider, CompoundTag nbt) {
+        String chem_name = nbt.getString("chemical");
 
+        if (chem_name.equals(this.chemStack.chemical().name)) {
+            this.chemStack.setMass(nbt.getFloat("mass"));
+        } else if (chem_name.equals("air")) {
+            this.chemStack = ChemicalStack.EMPTY;
+        } else {
+            AbstractSpecies chemical = ModChemicals.CHEMICALS.getRegistry().get().getValue(
+                    ResourceLocation.fromNamespaceAndPath(RimMod.MODID,
+                            chem_name));
+            this.chemStack = new ChemicalStack(chemical, nbt.getFloat("mass"));
+        }
+
+        onContentsChanged();
     }
 }

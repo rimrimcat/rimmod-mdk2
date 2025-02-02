@@ -67,7 +67,6 @@ public class TankBlockEntity extends BlockEntity implements MenuProvider {
         return itemHandler;
     }
 
-
     public boolean isEmpty() {
         return this.itemHandler.getStackInSlot(0).isEmpty() && this.itemHandler.getStackInSlot(1).isEmpty();
     }

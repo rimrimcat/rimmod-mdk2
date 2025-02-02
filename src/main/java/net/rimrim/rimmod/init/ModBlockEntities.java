@@ -50,6 +50,15 @@ public class ModBlockEntities {
             )
     );
 
+
+    public static final Supplier<BlockEntityType<ChemicalTankBlockEntity>> CHEMICAL_TANK = BLOCK_ENTITY_TYPES.register(
+            "chemical_tank",
+            () -> new BlockEntityType<>(
+                    ChemicalTankBlockEntity::new,
+                    ModBlocks.CHEMICAL_TANK.get()
+            )
+    );
+
     public static void register(IEventBus eventBus) {
         BLOCK_ENTITY_TYPES.register(eventBus);
     }

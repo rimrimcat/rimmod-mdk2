@@ -330,6 +330,7 @@ public class PureSpecies extends PureDependentProperty {
         }
 
         public PureSpecies build() {
+            // Read Tags and add other stuff
 
 
             return new PureSpecies(

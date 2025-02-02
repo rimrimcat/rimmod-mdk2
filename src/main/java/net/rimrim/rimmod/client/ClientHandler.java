@@ -1,8 +1,10 @@
 package net.rimrim.rimmod.client;
 
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.ModelEvent;
 import net.neoforged.neoforge.client.event.RegisterClientReloadListenersEvent;
@@ -49,20 +51,7 @@ public class ClientHandler {
     }
 
     @SubscribeEvent
-    public static void registerGeometryLoaders(ModelEvent.RegisterLoaders event) {
-//        event.register(ModUnbakedModelLoader.ID, ModUnbakedModelLoader.INSTANCE);
-    }
+    private static void setRenderType(FMLClientSetupEvent event) {
 
-    @SubscribeEvent
-    public static void onRegisterReloadListeners(RegisterClientReloadListenersEvent event) {
-//        event.registerReloadListener(ModUnbakedModelLoader.INSTANCE);
-    }
-
-    @SubscribeEvent
-    private static void modifyBakingResult(ModelEvent.ModifyBakingResult event) {
-//        event.getBakingResult().blockStateModels().computeIfPresent(
-//                new ModelResourceLocation(ResourceLocation.fromNamespaceAndPath(RimMod.MODID, "inserter"), ""),
-//                (location, model) -> new InserterDelegateBakedModel(model)
-//        );
     }
 }

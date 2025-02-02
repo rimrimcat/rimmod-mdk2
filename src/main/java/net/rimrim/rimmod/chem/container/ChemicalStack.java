@@ -1,8 +1,17 @@
 package net.rimrim.rimmod.chem.container;
 
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponentHolder;
+import net.minecraft.core.component.DataComponentMap;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.resources.ResourceLocation;
+import net.neoforged.neoforge.common.util.DataComponentUtil;
+import net.rimrim.rimmod.RimMod;
 import net.rimrim.rimmod.chem.enums.VariableType;
-import net.rimrim.rimmod.chem.props.PureSpecies;
 import net.rimrim.rimmod.chem.Chemicals;
+import net.rimrim.rimmod.chem.props.base.AbstractSpecies;
+import net.rimrim.rimmod.init.ModChemicals;
 
 import java.util.EnumMap;
 import java.util.Objects;
@@ -11,27 +20,31 @@ import static net.rimrim.rimmod.chem.enums.VariableType.*;
 
 
 public class ChemicalStack {
-    public static final ChemicalStack EMPTY = new ChemicalStack(Chemicals.NONE, 0);
+    public static final ChemicalStack EMPTY = new ChemicalStack(Chemicals.AIR, 0);
 
-    private final PureSpecies chemical;
+    private final AbstractSpecies chemical;
     private final EnumMap<VariableType, Float> processVars;
     // TODO: IMPLEMENT PHASES
 
-    public ChemicalStack(PureSpecies chemical, VariableType var, float value) {
+    public ChemicalStack(AbstractSpecies chemical, VariableType var, float value) {
         this.chemical = chemical;
         this.processVars = new EnumMap<>(VariableType.class);
 
+        // default
         processVars.put(TEMPERATURE, 25 + 273.15f);
         processVars.put(PRESSURE, 1f);
+        processVars.put(MASS, 0f);
+        processVars.put(VOLUME, 0f);
+        processVars.put(MOLE, 0f);
 
         addAmount(var, value);
     }
 
-    public ChemicalStack(PureSpecies chemical, float mass) {
+    public ChemicalStack(AbstractSpecies chemical, float mass) {
         this(chemical, MASS, mass);
     }
 
-    public ChemicalStack(PureSpecies chemical, EnumMap<VariableType, Float> pVars) {
+    public ChemicalStack(AbstractSpecies chemical, EnumMap<VariableType, Float> pVars) {
         this.chemical = chemical;
         this.processVars = pVars;
     }
@@ -48,19 +61,24 @@ public class ChemicalStack {
         return this.processVars.get(MASS);
     }
 
+    public float mol() {
+        return this.processVars.get(MOLE);
+    }
+
     public float MW() {
         return this.chemical.MW();
     }
 
     public float rho() {
-        return chemical.density(T(), P());
+        return chemical.density(processVars);
     }
 
     public float V() {
         return this.processVars.get(VOLUME);
     }
 
-    public PureSpecies chemical() {
+
+    public AbstractSpecies chemical() {
         return this.chemical;
     }
 
@@ -123,7 +141,6 @@ public class ChemicalStack {
         this.deductMass(volume * rho());
     }
 
-
     public void setAmount(VariableType varType, float value) {
         switch (varType) {
             case MASS -> setMass(value);
@@ -148,7 +165,6 @@ public class ChemicalStack {
         this.setMass(volume * rho());
     }
 
-
     public boolean is(ChemicalStack chemStack) {
         return this.chemical == chemStack.chemical;
     }
@@ -158,7 +174,7 @@ public class ChemicalStack {
     }
 
     public boolean isEmpty() {
-        return this == EMPTY || this.chemical == Chemicals.NONE || m() == 0;
+        return this == EMPTY || this.chemical == Chemicals.AIR || m() == 0;
     }
 
     public ChemicalStack copy() {
@@ -170,6 +186,15 @@ public class ChemicalStack {
         chemCopy.setAmount(varType, value);
         return chemCopy;
     }
+
+
+    public CompoundTag save(HolderLookup.Provider lookupProvider) {
+        CompoundTag tag = new CompoundTag();
+        tag.putString("chemical", this.chemical.name);
+        tag.putFloat("mass", m());
+        return tag;
+    }
+
 
     public String toString() {
         return m() + " kg " + this.chemical.name;

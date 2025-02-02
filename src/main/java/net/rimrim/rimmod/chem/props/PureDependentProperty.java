@@ -1,9 +1,11 @@
 package net.rimrim.rimmod.chem.props;
 
 import net.rimrim.rimmod.chem.correlation.type.base.IFunction;
-import net.rimrim.rimmod.chem.enums.MatterState;
+import net.rimrim.rimmod.chem.enums.ValidStates;
 
 public abstract class PureDependentProperty {
+
+    public ChemTags tags;
 
     private IFunction solid_density;
     private IFunction liquid_density;
@@ -25,15 +27,7 @@ public abstract class PureDependentProperty {
     private IFunction liquid_vapor_pressure;
 
 
-    public boolean isBoiling(float temperature, float pressure) {
-        return false;
-    }
-
-    public boolean isSolidifying(float temperature, float pressure) {
-        return false;
-    }
-
-    public MatterState state(float temperature, float pressure) {
+    public ValidStates state(float temperature, float pressure) {
         return null;
     }
 

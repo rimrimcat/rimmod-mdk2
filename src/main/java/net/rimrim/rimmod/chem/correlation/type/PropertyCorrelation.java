@@ -21,7 +21,6 @@ public class PropertyCorrelation implements IFunction {
 
     private final Limit[] inputLimits;
     private final Limit outputLimit;
-    // TODO: LIMITS?
 
     @SuppressWarnings("unchecked")
     public PropertyCorrelation(Parameter[] inputs, Parameter output, float[] constants, Function<FunctionInput, Float> formula, String reference) {

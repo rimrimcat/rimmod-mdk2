@@ -97,6 +97,12 @@ public class ModBlocks {
                     .setId(ResourceKey.create(Registries.BLOCK, registryName))
             ));
 
+    public static final DeferredBlock<ChemicalTankBlock> CHEMICAL_TANK = BLOCKS.register("chemical_tank",
+            registryName -> new ChemicalTankBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)
+                    .setId(ResourceKey.create(Registries.BLOCK, registryName))
+            ));
+
+
 
     // Helper
 

@@ -26,6 +26,7 @@ public class ModTabs {
                         output.accept(ModItems.INSERTER.get());
                         output.accept(ModItems.DEBUG_INSERTER.get());
                         output.accept(ModItems.CONDUCTIVE_BLOCK.get());
+                        output.accept(ModItems.CHEMICAL_TANK.get());
 
                     }
             ).build());

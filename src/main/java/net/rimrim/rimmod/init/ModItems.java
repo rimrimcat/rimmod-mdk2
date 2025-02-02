@@ -40,6 +40,7 @@ public class ModItems {
     public static final DeferredItem<BlockItem> INSERTER = ITEMS.registerSimpleBlockItem("inserter", ModBlocks.INSERTER);
     public static final DeferredItem<BlockItem> DEBUG_INSERTER = ITEMS.registerSimpleBlockItem("debug_inserter", ModBlocks.DEBUG_INSERTER);
     public static final DeferredItem<BlockItem> CONDUCTIVE_BLOCK = ITEMS.registerSimpleBlockItem("conductive_block", ModBlocks.CONDUCTIVE_BLOCK);
+    public static final DeferredItem<BlockItem> CHEMICAL_TANK = ITEMS.registerSimpleBlockItem("chemical_tank", ModBlocks.CHEMICAL_TANK);
 
 
 

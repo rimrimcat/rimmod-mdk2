@@ -1,4 +1,4 @@
-package net.rimrim.rimmod.chem.props.inter;
+package net.rimrim.rimmod.chem.props.inface;
 
 public interface IConstantProperties {
     float molecular_weight = 0;

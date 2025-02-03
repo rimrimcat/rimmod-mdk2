@@ -2,13 +2,14 @@ package net.rimrim.rimmod.chem.props.base;
 
 import net.rimrim.rimmod.chem.props.ChemTags;
 import net.rimrim.rimmod.chem.props.SpeciesBuilder;
-import net.rimrim.rimmod.chem.props.inter.ICompoundProperties;
-import net.rimrim.rimmod.chem.props.inter.IConstantProperties;
+import net.rimrim.rimmod.chem.props.inface.ICompoundProperties;
+import net.rimrim.rimmod.chem.props.inface.IConstantProperties;
 
 public abstract class AbstractSpecies implements IConstantProperties, ICompoundProperties {
 
     public final String name;
     public final ChemTags tags;
+    public final int color;
 
     public final float molecular_weight;
     public final float critical_temperature;
@@ -23,6 +24,7 @@ public abstract class AbstractSpecies implements IConstantProperties, ICompoundP
     protected AbstractSpecies(SpeciesBuilder builder) {
         this.name = builder.name;
         this.tags = builder.tags;
+        this.color = builder.color;
         this.molecular_weight = builder.molecular_weight;
         this.critical_temperature = builder.critical_temperature;
         this.critical_pressure = builder.critical_pressure;

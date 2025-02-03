@@ -3,9 +3,8 @@ package net.rimrim.rimmod.chem.props.base;
 import net.rimrim.rimmod.chem.correlation.type.base.IFunction;
 import net.rimrim.rimmod.chem.enums.MatterState;
 import net.rimrim.rimmod.chem.enums.VariableType;
-import net.rimrim.rimmod.chem.props.ChemTags;
 import net.rimrim.rimmod.chem.props.SpeciesBuilder;
-import net.rimrim.rimmod.chem.props.inter.IVaporProperties;
+import net.rimrim.rimmod.chem.props.inface.IVaporProperties;
 
 import java.util.EnumMap;
 

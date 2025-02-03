@@ -3,7 +3,6 @@ package net.rimrim.rimmod.chem;
 import net.rimrim.rimmod.chem.correlation.Correlations;
 import net.rimrim.rimmod.chem.correlation.type.ConstantProperty;
 import net.rimrim.rimmod.chem.props.ChemTags;
-import net.rimrim.rimmod.chem.props.PureSpecies;
 import net.rimrim.rimmod.chem.props.SpeciesBuilder;
 import net.rimrim.rimmod.chem.props.base.AbstractSpecies;
 import net.rimrim.rimmod.chem.props.base.PureLiquidSpecies;
@@ -15,6 +14,7 @@ import java.util.HashMap;
 public class Chemicals {
     public static AbstractSpecies AIR = new PureVaporSpecies(new SpeciesBuilder()
             .name("air")
+            .color(255, 255, 255)
             .MW(28.96)
             .vapor_density(new ConstantProperty(1.225))
             .vapor_heat_capacity(new ConstantProperty(1000))
@@ -23,6 +23,7 @@ public class Chemicals {
 
     public static AbstractSpecies WATER = new PureLiquidSpecies(new SpeciesBuilder()
             .name("water")
+            .color(65, 107, 223)
             .tags(ChemTags.WATER.toBuilder().liquidOnly().build())
             .fromSmiles("O")
             .Tc(647.096)

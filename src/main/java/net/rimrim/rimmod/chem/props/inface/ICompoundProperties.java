@@ -1,8 +1,7 @@
-package net.rimrim.rimmod.chem.props.inter;
+package net.rimrim.rimmod.chem.props.inface;
 
 import net.rimrim.rimmod.chem.enums.MatterState;
 import net.rimrim.rimmod.chem.enums.VariableType;
-import net.rimrim.rimmod.chem.props.ChemTags;
 
 import java.util.EnumMap;
 

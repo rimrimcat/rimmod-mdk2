@@ -8,8 +8,8 @@ import org.openbabel.OBMol;
 
 public class SpeciesBuilder {
     public String name = "";
-    public String atoms;
     public ChemTags tags = new ChemTags.Builder().build();
+    public int color = packColor(0, 0, 0);
 
     public float molecular_weight;
     public float acentric_factor;
@@ -42,6 +42,18 @@ public class SpeciesBuilder {
         // TODO: FIX PATH
     }
 
+    private int packColor(int r, int g, int b, int a) {
+        int red = r & 0xFF;
+        int green = g & 0xFF;
+        int blue = b & 0xFF;
+        int alpha = a & 0xFF;
+        return (alpha << 24) | (red << 16) | (green << 8) | blue;
+    }
+
+    private int packColor(int r, int g, int b) {
+        return this.packColor(r, g, b, 255);
+    }
+
     public SpeciesBuilder fromSmiles(String smiles) {
         this.loadLib();
 
@@ -60,6 +72,21 @@ public class SpeciesBuilder {
 
     public SpeciesBuilder name(String name) {
         this.name = name;
+        return this;
+    }
+
+    public SpeciesBuilder color(int col) {
+        this.color = col;
+        return this;
+    }
+
+    public SpeciesBuilder color(int r, int g, int b) {
+        this.color = packColor(r, g, b);
+        return this;
+    }
+
+    public SpeciesBuilder color(int r, int g, int b, int a) {
+        this.color = packColor(r, g, b, a);
         return this;
     }
 

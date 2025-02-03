@@ -8,6 +8,7 @@ import net.neoforged.neoforge.capabilities.BlockCapability;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.rimrim.rimmod.RimMod;
+import net.rimrim.rimmod.chem.container.ChemicalStackHandler;
 import net.rimrim.rimmod.props.IPhysicalPropertyHandler;
 import net.rimrim.rimmod.props.PhysicalPropertyHandler;
 import org.jetbrains.annotations.Nullable;
@@ -20,6 +21,14 @@ public class ModCapabilities {
                 BlockCapability.createSided(
                         ResourceLocation.fromNamespaceAndPath(RimMod.MODID, "physprop_handler"),
                         IPhysicalPropertyHandler.class
+                );
+    }
+
+    public static final class ChemicalHandler {
+        public static final BlockCapability<ChemicalStackHandler, @Nullable Direction> BLOCK =
+                BlockCapability.createSided(
+                        ResourceLocation.fromNamespaceAndPath(RimMod.MODID, "chemical_stack_handler"),
+                        ChemicalStackHandler.class
                 );
     }
 
@@ -46,6 +55,16 @@ public class ModCapabilities {
                 ModBlockEntities.CONDUCTIVE_BLOCK.get(),
                 (be, side) -> be.getPropHandler()
         );
+
+
+        event.registerBlockEntity(
+                Capabilities.ItemHandler.BLOCK,
+                ModBlockEntities.CHEMICAL_TANK.get(),
+                (be, side) -> be.getItemHandler());
+        event.registerBlockEntity(
+                ChemicalHandler.BLOCK,
+                ModBlockEntities.CHEMICAL_TANK.get(),
+                (be, side) -> be.getChemHandler());
 
     }
 }

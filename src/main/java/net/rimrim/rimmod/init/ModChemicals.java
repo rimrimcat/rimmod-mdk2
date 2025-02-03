@@ -6,7 +6,6 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.RegisterEvent;
 import net.rimrim.rimmod.RimMod;
 import net.rimrim.rimmod.chem.Chemicals;
-import net.rimrim.rimmod.chem.props.PureSpecies;
 import net.rimrim.rimmod.chem.props.base.AbstractSpecies;
 
 import java.util.function.Supplier;

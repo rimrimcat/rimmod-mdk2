@@ -1,4 +1,4 @@
-package net.rimrim.rimmod.chem.props.inter;
+package net.rimrim.rimmod.chem.props.inface;
 
 import net.rimrim.rimmod.chem.correlation.type.UnsetProperty;
 import net.rimrim.rimmod.chem.correlation.type.base.IFunction;

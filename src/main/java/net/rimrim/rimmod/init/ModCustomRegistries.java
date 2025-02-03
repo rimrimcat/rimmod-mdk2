@@ -8,7 +8,6 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.registries.NewRegistryEvent;
 import net.neoforged.neoforge.registries.RegistryBuilder;
 import net.rimrim.rimmod.RimMod;
-import net.rimrim.rimmod.chem.props.PureSpecies;
 import net.rimrim.rimmod.chem.props.base.AbstractSpecies;
 
 @EventBusSubscriber(modid = RimMod.MODID, bus = EventBusSubscriber.Bus.MOD)

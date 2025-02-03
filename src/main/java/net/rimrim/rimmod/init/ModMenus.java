@@ -1,7 +1,6 @@
 package net.rimrim.rimmod.init;
 
 import net.minecraft.core.registries.Registries;
-import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.inventory.MenuType;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.common.extensions.IMenuTypeExtension;
@@ -9,6 +8,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import net.rimrim.rimmod.RimMod;
 import net.rimrim.rimmod.menu.InserterMenu;
 import net.rimrim.rimmod.menu.TankMenu;
+import net.rimrim.rimmod.menu.ChemicalTankMenu;
 
 import java.util.function.Supplier;
 
@@ -26,6 +26,10 @@ public class ModMenus {
             () -> IMenuTypeExtension.create(InserterMenu::new)
     );
 
+    public static final Supplier<MenuType<ChemicalTankMenu>> CHEMICAL_TANK_MENU = MENU_TYPES.register(
+            "chemical_tank",
+            () -> IMenuTypeExtension.create(ChemicalTankMenu::new)
+    );
 
     public static void register(IEventBus eventBus) {
         MENU_TYPES.register(eventBus);

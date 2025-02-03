@@ -1,17 +1,11 @@
 package net.rimrim.rimmod.chem.container;
 
 import net.minecraft.core.HolderLookup;
-import net.minecraft.core.component.DataComponentHolder;
-import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
-import net.minecraft.resources.ResourceLocation;
-import net.neoforged.neoforge.common.util.DataComponentUtil;
-import net.rimrim.rimmod.RimMod;
+import net.rimrim.rimmod.chem.correlation.type.base.IFunction;
 import net.rimrim.rimmod.chem.enums.VariableType;
 import net.rimrim.rimmod.chem.Chemicals;
 import net.rimrim.rimmod.chem.props.base.AbstractSpecies;
-import net.rimrim.rimmod.init.ModChemicals;
 
 import java.util.EnumMap;
 import java.util.Objects;
@@ -165,6 +159,11 @@ public class ChemicalStack {
         this.setMass(volume * rho());
     }
 
+    public float evaluatePropertyAtConditions(IFunction func) {
+        return func.evaluate(this.processVars);
+    }
+
+
     public boolean is(ChemicalStack chemStack) {
         return this.chemical == chemStack.chemical;
     }
@@ -195,6 +194,13 @@ public class ChemicalStack {
         return tag;
     }
 
+    public EnumMap<VariableType, Float> processVars() {
+        return processVars;
+    }
+
+    public EnumMap<VariableType, Float> getProcessVarsCopy() {
+        return processVars.clone();
+    }
 
     public String toString() {
         return m() + " kg " + this.chemical.name;

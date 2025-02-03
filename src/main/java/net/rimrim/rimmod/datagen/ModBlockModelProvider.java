@@ -117,23 +117,4 @@ public class ModBlockModelProvider extends ModelProvider {
         );
     }
 
-    // private void horizontallyRotatableBlock(BlockModelGenerators blockModels,
-    //                                         Block block,
-    //                                         String path,
-    //                                         EnumProperty<Direction> property
-    // ) {
-    //     ResourceLocation resourceLocation = ResourceLocation.fromNamespaceAndPath(RimMod.MODID, path);
-    //     blockModels.blockStateOutput.accept(
-    //             MultiVariantGenerator.multiVariant(block, Variant.variant().with(VariantProperties.MODEL, resourceLocation))
-    //                     .with(
-    //                             PropertyDispatch.property(property)
-    //                                     .select(Direction.NORTH, Variant.variant().with(VariantProperties.Y_ROT, VariantProperties.Rotation.R0))
-    //                                     .select(Direction.SOUTH, Variant.variant().with(VariantProperties.Y_ROT, VariantProperties.Rotation.R180))
-    //                                     .select(Direction.WEST, Variant.variant().with(VariantProperties.Y_ROT, VariantProperties.Rotation.R270))
-    //                                     .select(Direction.EAST, Variant.variant().with(VariantProperties.Y_ROT, VariantProperties.Rotation.R90))
-    //                     )
-    //     );
-    // }
-
-
 }

@@ -10,8 +10,10 @@ import net.neoforged.neoforge.client.event.ModelEvent;
 import net.neoforged.neoforge.client.event.RegisterClientReloadListenersEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.rimrim.rimmod.RimMod;
+import net.rimrim.rimmod.client.renderer.ChemicalTankBER;
 import net.rimrim.rimmod.client.renderer.DebugInserterBER;
 import net.rimrim.rimmod.client.renderer.InserterBER;
+import net.rimrim.rimmod.client.screen.ChemicalTankScreen;
 import net.rimrim.rimmod.client.screen.InserterScreen;
 import net.rimrim.rimmod.client.screen.TankScreen;
 import net.rimrim.rimmod.init.ModBlockEntities;
@@ -31,12 +33,18 @@ public class ClientHandler {
                 DebugInserterBER::new
         );
 
+        event.registerBlockEntityRenderer(
+                ModBlockEntities.CHEMICAL_TANK.get(),
+                ChemicalTankBER::new
+        );
+
     }
 
     @SubscribeEvent
     private static void registerScreens(RegisterMenuScreensEvent event) {
         event.register(ModMenus.INSERTER_MENU.get(), InserterScreen::new);
         event.register(ModMenus.TANK_MENU.get(), TankScreen::new);
+        event.register(ModMenus.CHEMICAL_TANK_MENU.get(), ChemicalTankScreen::new);
     }
 
     @SubscribeEvent
@@ -50,8 +58,5 @@ public class ClientHandler {
                 DebugInserterBER::createBodyLayer);
     }
 
-    @SubscribeEvent
-    private static void setRenderType(FMLClientSetupEvent event) {
 
-    }
 }

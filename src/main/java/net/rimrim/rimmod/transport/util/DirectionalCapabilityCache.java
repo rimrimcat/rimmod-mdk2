@@ -10,6 +10,8 @@ import net.neoforged.neoforge.capabilities.BlockCapabilityCache;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Stream;
 
@@ -81,5 +83,18 @@ public class DirectionalCapabilityCache<T> {
                 .iterator();
     }
 
+
+    public Iterator<List<Object>> iterateCapWithDirection() {
+        return Stream.of(
+                        List.of(Direction.UP, this.capCache_up.getCapability()),
+                        List.of(Direction.DOWN, this.capCache_down.getCapability()),
+                        List.of(Direction.NORTH, this.capCache_north.getCapability()),
+                        List.of(Direction.SOUTH, this.capCache_south.getCapability()),
+                        List.of(Direction.WEST, this.capCache_west.getCapability()),
+                        List.of(Direction.EAST, this.capCache_east.getCapability())
+                )
+                .filter(list -> list.get(1) != null)
+                .iterator();
+    }
 
 }

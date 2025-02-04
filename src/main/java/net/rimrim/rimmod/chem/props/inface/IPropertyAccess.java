@@ -70,4 +70,11 @@ public interface IPropertyAccess {
      * @return The thermal conductivity of the substance in W/m-K.
      */
     float k();
+
+    /**
+     * Get the heat capacity of the substance at constant pressure in J/kg-K.
+     *
+     * @return The heat capacity of the substance at constant pressure in J/kg-K.
+     */
+    float cp();
 }

@@ -81,6 +81,10 @@ public class ChemicalStack implements IPropertyAccess {
         return chemical.thermal_conductivity(processVars);
     }
 
+    public float cp() {
+        return chemical.heat_capacity(processVars);
+    }
+
 
     public AbstractSpecies chemical() {
         return this.chemical;

@@ -1,5 +1,8 @@
 package net.rimrim.rimmod.transport.heat;
 
+import net.minecraft.core.Direction;
+import net.rimrim.rimmod.chem.container.ChemContainer;
+import net.rimrim.rimmod.chem.enums.ProcessVariableType;
 import net.rimrim.rimmod.chem.stack.ChemicalStackHandler;
 import net.rimrim.rimmod.transport.ITransportHandler;
 import net.rimrim.rimmod.transport.TransportHandler;
@@ -25,35 +28,64 @@ public class HeatHandler {
 
     /**
      * Conducts heat to chemical inside container.
-     *
+     * Uses simple series conduction through flat slab
      */
     public void conductHeatToChemical() {
+        if (this.transHandler.chemHandler() == null) return;
+        if (this.transHandler.chemHandler().chemStack().isEmpty()) return;
 
+        ChemicalStackHandler chemHandler = this.transHandler.chemHandler();
+        ChemContainer container = chemHandler.container();
+
+        float T_A = chemHandler.T();
+        float T_B = container.T();
+
+        float x_A = container.shape().fluid_height(chemHandler.V());
+        float x_B = container.shape().thickness();
+
+        float transfer_area = container.shape().inner_contact_surface_area(
+                chemHandler.V()
+        );
+
+        float thermal_res = (x_A / container.k() + x_B / chemHandler.k()) / transfer_area;
+
+        float flux = -(T_B - T_A) / thermal_res;
+
+        float mC_A = chemHandler.m() * chemHandler.cp();
+        float mC_B = container.m() * container.cp();
+
+        chemHandler.chemStack().mapIncrement(ProcessVariableType.TEMPERATURE, -flux * 0.1f / mC_A);
+        container.mapIncrement(ProcessVariableType.TEMPERATURE, flux * 0.1f / mC_B);
     }
 
     /**
      * Conducts heat to other blocks
+     * Uses simple series conduction through flat slab
      *
      * @param otherHandler: HeatHandler of the other block
      */
-    public void conductHeatToNeighbor(HeatHandler otherHandler) {
-        // Conduction should strictly only from high temp to low temp
+    public void conductHeatToNeighbor(HeatHandler otherHandler, Direction dir) {
+        // Conduction to neighbor should strictly only be from high temp to low temp
+        ChemContainer thisContainer = this.transHandler.chemHandler().container();
+        ChemContainer otherContainer = otherHandler.transHandler.chemHandler().container();
 
-        // float T_A = this.transHandler().T();
-        // float T_B = otherHandler.transHandler.T();
-        // if (T_B > T_A) {
-        //     otherHandler.conductHeatTo(this);
-        //     return;
-        // }
-        //
-        // float thermal_res = 0.5f / this.thermal_conductivity() + 0.5f / otherHandler.thermal_conductivity();
-        // float flux = -(T_B - T_A) / thermal_res;
-        //
-        // float mC_A = this.mass() * this.heat_capacity();
-        // float mC_B = otherHandler.mass() * otherHandler.heat_capacity();
-        //
-        // this.updateTemperature(-flux * 0.1f / mC_A + T_A);
-        // otherHandler.updateTemperature(flux * 0.1f / mC_B + T_B);
+        float T_A = thisContainer.T();
+        float T_B = otherContainer.T();
+        if (T_B > T_A) {
+            return;
+        }
+
+        float this_res = 0.5f / thisContainer.k() / thisContainer.shape().outer_face_surface_area(dir);
+        float other_res = 0.5f / otherContainer.k() / otherContainer.shape().outer_face_surface_area(dir.getOpposite());
+        float thermal_res = this_res + other_res;
+
+        float flux = -(T_B - T_A) / thermal_res;
+
+        float mC_A = thisContainer.m() * thisContainer.cp();
+        float mC_B = otherContainer.m() * otherContainer.cp();
+
+        thisContainer.mapIncrement(ProcessVariableType.TEMPERATURE, -flux * 0.1f / mC_A);
+        otherContainer.mapIncrement(ProcessVariableType.TEMPERATURE, flux * 0.1f / mC_B);
     }
 
     public void tryConduct() {

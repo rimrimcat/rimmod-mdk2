@@ -13,10 +13,9 @@ import net.rimrim.rimmod.transport.heat.HeatHandler;
 import net.rimrim.rimmod.transport.util.DirectionalCapabilityCache;
 import org.jetbrains.annotations.Nullable;
 
-public class TransportHandler implements IPropertyAccess {
+public class TransportHandler {
 
     public DirectionalCapabilityCache<TransportHandler> dcache;
-    private final AbstractSpecies containerMaterial;
     private final ChemicalStackHandler chemHandler;
 
     // TODO: MAKE TRANSPORT HANDLER MODULAR
@@ -25,9 +24,12 @@ public class TransportHandler implements IPropertyAccess {
 
 
     public TransportHandler(ChemicalStackHandler chemHandler) {
-        this.containerMaterial = Chemicals.IRON;
-
         this.chemHandler = chemHandler;
+        this.heatHandler = new HeatHandler(this);
+    }
+
+    public TransportHandler() {
+        this.chemHandler = new ChemicalStackHandler(0);
         this.heatHandler = new HeatHandler(this);
     }
 
@@ -48,49 +50,4 @@ public class TransportHandler implements IPropertyAccess {
     }
 
 
-    // IPropertyAccess
-    @Override
-    public float T() {
-        return this.chemHandler.chemStack().T();
-    }
-
-    @Override
-    public float P() {
-        return this.chemHandler.chemStack().P();
-    }
-
-    @Override
-    public float m() {
-        return this.chemHandler.chemStack().m();
-    }
-
-    @Override
-    public float mol() {
-        return this.chemHandler.chemStack().mol();
-    }
-
-    @Override
-    public float MW() {
-        return this.chemHandler.chemStack().MW();
-    }
-
-    @Override
-    public float rho() {
-        return this.chemHandler.chemStack().rho();
-    }
-
-    @Override
-    public float V() {
-        return this.chemHandler.chemStack().V();
-    }
-
-    @Override
-    public MatterState state() {
-        return this.chemHandler.chemStack().state();
-    }
-
-    @Override
-    public float k() {
-        return this.chemHandler.chemStack().k();
-    }
 }

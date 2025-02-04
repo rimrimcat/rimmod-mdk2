@@ -15,7 +15,6 @@ public class ChemContainer implements IPropertyAccess {
 
     private final IContainerShape shape;
     private final AbstractSpecies material;
-    private final float mass;
     private final float density;
     private final EnumMap<ProcessVariableType, Float> containerVars;
 
@@ -27,8 +26,13 @@ public class ChemContainer implements IPropertyAccess {
         containerVars.put(ProcessVariableType.TEMPERATURE, 25 + 273.15f);
         containerVars.put(ProcessVariableType.PRESSURE, 1f);
 
-        this.density = material.density(containerVars);
-        this.mass = (shape.outer_volume() - shape.inner_volume()) * this.density;
+        density = material.density(containerVars);
+
+        float mass = (shape.outer_volume() - shape.inner_volume()) * density;
+        containerVars.put(ProcessVariableType.MASS, mass);
+        containerVars.put(ProcessVariableType.MOLE, mass / material.MW());
+        containerVars.put(ProcessVariableType.VOLUME, mass / density);
+
     }
 
     public ChemContainer(IContainerShape shape) {
@@ -47,6 +51,15 @@ public class ChemContainer implements IPropertyAccess {
         return this.material;
     }
 
+    public void mapIncrement(ProcessVariableType varType, float value) {
+        this.containerVars.put(varType, this.containerVars.get(varType) + value);
+    }
+
+    public void mapDecrement(ProcessVariableType varType, float value) {
+        this.containerVars.put(varType, this.containerVars.get(varType) - value);
+    }
+
+
     // IPropertyAccess
     public float T() {
         return containerVars.get(ProcessVariableType.TEMPERATURE);
@@ -57,11 +70,11 @@ public class ChemContainer implements IPropertyAccess {
     }
 
     public float m() {
-        return this.mass;
+        return containerVars.get(ProcessVariableType.MASS);
     }
 
     public float mol() {
-        return m() / MW();
+        return containerVars.get(ProcessVariableType.MOLE);
     }
 
     public float MW() {
@@ -73,7 +86,7 @@ public class ChemContainer implements IPropertyAccess {
     }
 
     public float V() {
-        return m() / rho();
+        return containerVars.get(ProcessVariableType.VOLUME);
     }
 
     public MatterState state() {
@@ -82,6 +95,10 @@ public class ChemContainer implements IPropertyAccess {
 
     public float k() {
         return material.thermal_conductivity(containerVars);
+    }
+
+    public float cp() {
+        return material.heat_capacity(containerVars);
     }
 
 

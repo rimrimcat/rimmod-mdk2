@@ -212,49 +212,44 @@ public class ChemicalStackHandler implements INBTSerializable<CompoundTag>, IPro
     }
 
     // IPropertyAccess
-    @Override
     public float T() {
         return this.chemStack.T();
     }
 
-    @Override
     public float P() {
         return this.chemStack.P();
     }
 
-    @Override
     public float m() {
         return this.chemStack.m();
     }
 
-    @Override
     public float mol() {
         return this.chemStack.mol();
     }
 
-    @Override
     public float MW() {
         return this.chemStack.MW();
     }
 
-    @Override
     public float rho() {
         return this.chemStack.rho();
     }
 
-    @Override
     public float V() {
         return this.chemStack.V();
     }
 
-    @Override
     public MatterState state() {
         return this.chemStack.state();
     }
 
-    @Override
     public float k() {
         return this.chemStack.k();
+    }
+
+    public float cp() {
+        return this.chemStack.cp();
     }
 }
 

@@ -4,26 +4,27 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.rimrim.rimmod.chem.correlation.type.base.IFunction;
 import net.rimrim.rimmod.chem.enums.MatterState;
-import net.rimrim.rimmod.chem.enums.VariableType;
+import net.rimrim.rimmod.chem.enums.ProcessVariableType;
 import net.rimrim.rimmod.chem.Chemicals;
 import net.rimrim.rimmod.chem.props.base.AbstractSpecies;
+import net.rimrim.rimmod.chem.props.inface.IPropertyAccess;
 
 import java.util.EnumMap;
 import java.util.Objects;
 
-import static net.rimrim.rimmod.chem.enums.VariableType.*;
+import static net.rimrim.rimmod.chem.enums.ProcessVariableType.*;
 
 
-public class ChemicalStack {
+public class ChemicalStack implements IPropertyAccess {
     public static final ChemicalStack EMPTY = new ChemicalStack(Chemicals.AIR, 0);
 
     private final AbstractSpecies chemical;
-    private final EnumMap<VariableType, Float> processVars;
+    private final EnumMap<ProcessVariableType, Float> processVars;
     // TODO: IMPLEMENT PHASES
 
-    public ChemicalStack(AbstractSpecies chemical, VariableType var, float value) {
+    public ChemicalStack(AbstractSpecies chemical, ProcessVariableType var, float value) {
         this.chemical = chemical;
-        this.processVars = new EnumMap<>(VariableType.class);
+        this.processVars = new EnumMap<>(ProcessVariableType.class);
 
         // default
         processVars.put(TEMPERATURE, 25 + 273.15f);
@@ -39,17 +40,17 @@ public class ChemicalStack {
         this(chemical, MASS, mass);
     }
 
-    public ChemicalStack(AbstractSpecies chemical, EnumMap<VariableType, Float> pVars) {
+    public ChemicalStack(AbstractSpecies chemical, EnumMap<ProcessVariableType, Float> pVars) {
         this.chemical = chemical;
         this.processVars = pVars;
     }
 
     public float T() {
-        return this.processVars.get(VariableType.TEMPERATURE);
+        return this.processVars.get(ProcessVariableType.TEMPERATURE);
     }
 
     public float P() {
-        return this.processVars.get(VariableType.PRESSURE);
+        return this.processVars.get(ProcessVariableType.PRESSURE);
     }
 
     public float m() {
@@ -76,21 +77,24 @@ public class ChemicalStack {
         return this.chemical.state(processVars);
     }
 
+    public float k() {
+        return chemical.thermal_conductivity(processVars);
+    }
+
 
     public AbstractSpecies chemical() {
         return this.chemical;
     }
 
-    public void mapIncrement(VariableType varType, float value) {
+    public void mapIncrement(ProcessVariableType varType, float value) {
         this.processVars.put(varType, this.processVars.get(varType) + value);
     }
 
-    public void mapDecrement(VariableType varType, float value) {
+    public void mapDecrement(ProcessVariableType varType, float value) {
         this.processVars.put(varType, this.processVars.get(varType) - value);
     }
 
-
-    public void addAmount(VariableType varType, float value) {
+    public void addAmount(ProcessVariableType varType, float value) {
         switch (varType) {
             case MASS -> addMass(value);
             case MOLE -> addMole(value);
@@ -115,7 +119,7 @@ public class ChemicalStack {
         this.addMass(volume * rho());
     }
 
-    public void deductAmount(VariableType varType, float value) {
+    public void deductAmount(ProcessVariableType varType, float value) {
         switch (varType) {
             case MASS -> deductMass(value);
             case MOLE -> deductMole(value);
@@ -140,7 +144,7 @@ public class ChemicalStack {
         this.deductMass(volume * rho());
     }
 
-    public void setAmount(VariableType varType, float value) {
+    public void setAmount(ProcessVariableType varType, float value) {
         switch (varType) {
             case MASS -> setMass(value);
             case MOLE -> setMole(value);
@@ -185,7 +189,7 @@ public class ChemicalStack {
         return (this.isEmpty()) ? EMPTY : new ChemicalStack(this.chemical, m());
     }
 
-    public ChemicalStack copyWithAmount(VariableType varType, float value) {
+    public ChemicalStack copyWithAmount(ProcessVariableType varType, float value) {
         ChemicalStack chemCopy = this.copy();
         chemCopy.setAmount(varType, value);
         return chemCopy;
@@ -199,11 +203,11 @@ public class ChemicalStack {
         return tag;
     }
 
-    public EnumMap<VariableType, Float> processVars() {
+    public EnumMap<ProcessVariableType, Float> processVars() {
         return processVars;
     }
 
-    public EnumMap<VariableType, Float> getProcessVarsCopy() {
+    public EnumMap<ProcessVariableType, Float> getProcessVarsCopy() {
         return processVars.clone();
     }
 

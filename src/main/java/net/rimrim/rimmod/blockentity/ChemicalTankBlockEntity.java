@@ -96,7 +96,7 @@ public class ChemicalTankBlockEntity extends BlockEntity implements MenuProvider
 
 
         RimMod.LOGGER.info("checking if same fluid or empty");
-        ChemicalStack chemStack = this.chemHandler.getChemicalStack();
+        ChemicalStack chemStack = this.chemHandler.chemStack();
         boolean sameFluidOrEmpty = (Objects.equals(chemStack.chemical().name, "water") || chemStack.isEmpty());
         if (!sameFluidOrEmpty) return;
 

@@ -2,6 +2,7 @@ package net.rimrim.rimmod.chem.props.base;
 
 import net.rimrim.rimmod.chem.correlation.type.base.IFunction;
 import net.rimrim.rimmod.chem.enums.MatterState;
+import net.rimrim.rimmod.chem.enums.ProcessVariableType;
 import net.rimrim.rimmod.chem.enums.VariableType;
 import net.rimrim.rimmod.chem.props.SpeciesBuilder;
 import net.rimrim.rimmod.chem.props.inface.ISolidProperties;
@@ -27,32 +28,32 @@ public class PureSolidSpecies extends AbstractSpecies implements ISolidPropertie
 
 
     @Override
-    public MatterState state(EnumMap<VariableType, Float> processVars) {
+    public MatterState state(EnumMap<ProcessVariableType, Float> processVars) {
         return MatterState.SOLID;
     }
 
     @Override
-    public float density(EnumMap<VariableType, Float> processVars) {
+    public float density(EnumMap<ProcessVariableType, Float> processVars) {
         return solid_density.evaluate(processVars);
     }
 
     @Override
-    public float viscosity(EnumMap<VariableType, Float> processVars) {
+    public float viscosity(EnumMap<ProcessVariableType, Float> processVars) {
         return solid_viscosity.evaluate(processVars);
     }
 
     @Override
-    public float heat_capacity(EnumMap<VariableType, Float> processVars) {
+    public float heat_capacity(EnumMap<ProcessVariableType, Float> processVars) {
         return solid_heat_capacity.evaluate(processVars);
     }
 
     @Override
-    public float thermal_conductivity(EnumMap<VariableType, Float> processVars) {
+    public float thermal_conductivity(EnumMap<ProcessVariableType, Float> processVars) {
         return solid_thermal_conductivity.evaluate(processVars);
     }
 
     @Override
-    public float vapor_pressure(EnumMap<VariableType, Float> processVars) {
+    public float vapor_pressure(EnumMap<ProcessVariableType, Float> processVars) {
         return solid_vapor_pressure.evaluate(processVars);
     }
 }

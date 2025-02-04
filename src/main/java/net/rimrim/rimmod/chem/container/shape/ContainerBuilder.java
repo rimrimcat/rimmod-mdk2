@@ -1,4 +1,4 @@
-package net.rimrim.rimmod.chem.container;
+package net.rimrim.rimmod.chem.container.shape;
 
 public class ContainerBuilder {
 

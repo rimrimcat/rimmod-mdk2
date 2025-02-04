@@ -3,6 +3,7 @@ package net.rimrim.rimmod.chem.correlation.type;
 import net.rimrim.rimmod.chem.correlation.type.base.BaseForm;
 import net.rimrim.rimmod.chem.correlation.type.base.FunctionInput;
 import net.rimrim.rimmod.chem.correlation.type.base.IFunction;
+import net.rimrim.rimmod.chem.enums.ProcessVariableType;
 import net.rimrim.rimmod.chem.enums.VariableType;
 import net.rimrim.rimmod.chem.unit.Limit;
 import net.rimrim.rimmod.chem.unit.Parameter;
@@ -45,7 +46,7 @@ public class PropertyCorrelation implements IFunction {
     }
 
 
-    public float evaluate(EnumMap<VariableType, Float> processVars) {
+    public float evaluate(EnumMap<ProcessVariableType, Float> processVars) {
         float[] inputs = new float[accessedVars.length];
 
         for (int i = 0; i < inputs.length; i++) {

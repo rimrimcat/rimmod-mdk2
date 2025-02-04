@@ -5,21 +5,22 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.state.BlockState;
 import net.rimrim.rimmod.chem.Chemicals;
+import net.rimrim.rimmod.chem.enums.MatterState;
+import net.rimrim.rimmod.chem.props.inface.IPropertyAccess;
 import net.rimrim.rimmod.chem.stack.ChemicalStackHandler;
 import net.rimrim.rimmod.chem.props.base.AbstractSpecies;
-import net.rimrim.rimmod.chem.container.Cubic;
-import net.rimrim.rimmod.chem.container.IContainerShape;
 import net.rimrim.rimmod.transport.heat.HeatHandler;
 import net.rimrim.rimmod.transport.util.DirectionalCapabilityCache;
 import org.jetbrains.annotations.Nullable;
 
-public class TransportHandler {
+public class TransportHandler implements IPropertyAccess {
 
-    public DirectionalCapabilityCache<ITransportHandler> dcache;
+    public DirectionalCapabilityCache<TransportHandler> dcache;
     private final AbstractSpecies containerMaterial;
     private final ChemicalStackHandler chemHandler;
 
-    // TODO: MAKE TRANSPORTHANDLER MODULAR
+    // TODO: MAKE TRANSPORT HANDLER MODULAR
+    // TODO: ENUMS FOR HEAT HANDLER TYPES?
     private final HeatHandler heatHandler;
 
 
@@ -30,11 +31,11 @@ public class TransportHandler {
         this.heatHandler = new HeatHandler(this);
     }
 
-    public ChemicalStackHandler getChemHandler() {
+    public ChemicalStackHandler chemHandler() {
         return this.chemHandler;
     }
 
-    public @Nullable HeatHandler getHeatHandler() {
+    public @Nullable HeatHandler heatHandler() {
         return this.heatHandler;
     }
 
@@ -47,4 +48,49 @@ public class TransportHandler {
     }
 
 
+    // IPropertyAccess
+    @Override
+    public float T() {
+        return this.chemHandler.chemStack().T();
+    }
+
+    @Override
+    public float P() {
+        return this.chemHandler.chemStack().P();
+    }
+
+    @Override
+    public float m() {
+        return this.chemHandler.chemStack().m();
+    }
+
+    @Override
+    public float mol() {
+        return this.chemHandler.chemStack().mol();
+    }
+
+    @Override
+    public float MW() {
+        return this.chemHandler.chemStack().MW();
+    }
+
+    @Override
+    public float rho() {
+        return this.chemHandler.chemStack().rho();
+    }
+
+    @Override
+    public float V() {
+        return this.chemHandler.chemStack().V();
+    }
+
+    @Override
+    public MatterState state() {
+        return this.chemHandler.chemStack().state();
+    }
+
+    @Override
+    public float k() {
+        return this.chemHandler.chemStack().k();
+    }
 }

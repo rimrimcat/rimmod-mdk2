@@ -4,9 +4,5 @@ import net.rimrim.rimmod.chem.props.base.AbstractSpecies;
 
 public interface ITransportHandler {
 
-    // AbstractSpecies chemical;
-    // float mass;
-
-
-
+    // TODO: LATER
 }

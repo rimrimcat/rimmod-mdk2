@@ -1,6 +1,7 @@
 package net.rimrim.rimmod.chem.correlation.type;
 
 import net.rimrim.rimmod.chem.correlation.type.base.IFunction;
+import net.rimrim.rimmod.chem.enums.ProcessVariableType;
 import net.rimrim.rimmod.chem.enums.VariableType;
 
 import java.util.EnumMap;
@@ -23,7 +24,7 @@ public class ConstantProperty implements IFunction {
     }
 
 
-    public float evaluate(EnumMap<VariableType, Float> processVars) {
+    public float evaluate(EnumMap<ProcessVariableType, Float> processVars) {
         return value;
     }
 }

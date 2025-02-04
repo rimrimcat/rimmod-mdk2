@@ -1,4 +1,6 @@
-package net.rimrim.rimmod.chem.container;
+package net.rimrim.rimmod.chem.container.shape;
+
+import net.minecraft.core.Direction;
 
 public class Cubic implements IContainerShape {
     public final float inner_length;
@@ -32,8 +34,14 @@ public class Cubic implements IContainerShape {
 
 
     @Override
-    public float volume() {
+    public float inner_volume() {
         return this.inner_volume;
+    }
+
+
+    @Override
+    public float outer_volume() {
+        return this.outer_volume;
     }
 
     @Override
@@ -48,8 +56,8 @@ public class Cubic implements IContainerShape {
     }
 
     @Override
-    public float ambient_surface_area() {
-        return outer_volume;
+    public float face_surface_area(Direction dir) {
+        return (inner_length + thickness) * (inner_length + thickness);
     }
 
 

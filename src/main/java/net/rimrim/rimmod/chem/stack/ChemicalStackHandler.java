@@ -7,17 +7,18 @@ import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.common.util.INBTSerializable;
 import net.rimrim.rimmod.RimMod;
 import net.rimrim.rimmod.chem.Chemicals;
-import net.rimrim.rimmod.chem.container.Cubic;
-import net.rimrim.rimmod.chem.container.IContainerShape;
-import net.rimrim.rimmod.chem.enums.VariableType;
+import net.rimrim.rimmod.chem.container.ChemContainer;
+import net.rimrim.rimmod.chem.enums.MatterState;
+import net.rimrim.rimmod.chem.enums.ProcessVariableType;
 import net.rimrim.rimmod.chem.props.base.AbstractSpecies;
+import net.rimrim.rimmod.chem.props.inface.IPropertyAccess;
 import net.rimrim.rimmod.init.ModChemicals;
 
 import java.util.EnumMap;
 
-public class ChemicalStackHandler implements INBTSerializable<CompoundTag> {
+public class ChemicalStackHandler implements INBTSerializable<CompoundTag>, IPropertyAccess {
 
-    private IContainerShape container;
+    private ChemContainer container;
     private ChemicalStack chemStack;
     private AbstractSpecies spaceFillingChemical; // unused for now
 
@@ -33,21 +34,25 @@ public class ChemicalStackHandler implements INBTSerializable<CompoundTag> {
     }
 
     public ChemicalStackHandler(AbstractSpecies spaceFiller, float volume) {
-        this.container = new Cubic(volume);
+        this.container = new ChemContainer(volume);
         this.spaceFillingChemical = spaceFiller;
         this.chemStack = ChemicalStack.EMPTY;
     }
 
-    public ChemicalStack getChemicalStack() {
+    public ChemicalStack chemStack() {
         return this.chemStack;
     }
 
-    public EnumMap<VariableType, Float> processVars() {
+    public ChemContainer container() {
+        return this.container;
+    }
+
+    public EnumMap<ProcessVariableType, Float> processVars() {
         return this.chemStack.processVars();
     }
 
     public float maxVolume() {
-        return container.volume();
+        return container.shape().inner_volume();
     }
 
 
@@ -76,7 +81,7 @@ public class ChemicalStackHandler implements INBTSerializable<CompoundTag> {
         ));
     }
 
-    public void setChemicalAmount(VariableType varType, float value) {
+    public void setChemicalAmount(ProcessVariableType varType, float value) {
         if (this.chemStack.isEmpty()) return;
 
         this.chemStack.addAmount(varType, value);
@@ -120,10 +125,10 @@ public class ChemicalStackHandler implements INBTSerializable<CompoundTag> {
             if (this.chemStack.isEmpty()) {
                 if (!simulate) {
                     RimMod.LOGGER.info("EMPTY CONTAINER >> SET ONLY INSERTABLE VOLUME DUE TO EXCESS");
-                    this.chemStack = otherChemStack.copyWithAmount(VariableType.VOLUME, insertableVolume);
+                    this.chemStack = otherChemStack.copyWithAmount(ProcessVariableType.VOLUME, insertableVolume);
                     this.onContentsChanged();
                 }
-                return otherChemStack.copyWithAmount(VariableType.VOLUME, excessVolume);
+                return otherChemStack.copyWithAmount(ProcessVariableType.VOLUME, excessVolume);
             }
 
             // Add chemical only if same
@@ -133,7 +138,7 @@ public class ChemicalStackHandler implements INBTSerializable<CompoundTag> {
                     this.chemStack.addVolume(insertableVolume);
                     this.onContentsChanged();
                 }
-                return otherChemStack.copyWithAmount(VariableType.VOLUME, excessVolume);
+                return otherChemStack.copyWithAmount(ProcessVariableType.VOLUME, excessVolume);
             } else {
                 // Return if different chemical
                 return otherChemStack;
@@ -146,7 +151,7 @@ public class ChemicalStackHandler implements INBTSerializable<CompoundTag> {
         return this.insertChemical(otherChemStack, simulate);
     }
 
-    public ChemicalStack extractChemical(AbstractSpecies chemical, VariableType varType, float value, boolean simulate) {
+    public ChemicalStack extractChemical(AbstractSpecies chemical, ProcessVariableType varType, float value, boolean simulate) {
         if (this.chemStack.isEmpty() || chemical == Chemicals.AIR) return ChemicalStack.EMPTY;
         if (!this.chemStack.is(chemical.name)) return ChemicalStack.EMPTY;
 
@@ -164,7 +169,7 @@ public class ChemicalStackHandler implements INBTSerializable<CompoundTag> {
                 this.chemStack.deductMass(requestedMass);
                 this.onContentsChanged();
             }
-            return this.chemStack.copyWithAmount(VariableType.MASS, requestedMass);
+            return this.chemStack.copyWithAmount(ProcessVariableType.MASS, requestedMass);
         } else {
             // Extract all
             ChemicalStack chemCopy = this.chemStack.copy();
@@ -205,4 +210,52 @@ public class ChemicalStackHandler implements INBTSerializable<CompoundTag> {
 
         onContentsChanged();
     }
+
+    // IPropertyAccess
+    @Override
+    public float T() {
+        return this.chemStack.T();
+    }
+
+    @Override
+    public float P() {
+        return this.chemStack.P();
+    }
+
+    @Override
+    public float m() {
+        return this.chemStack.m();
+    }
+
+    @Override
+    public float mol() {
+        return this.chemStack.mol();
+    }
+
+    @Override
+    public float MW() {
+        return this.chemStack.MW();
+    }
+
+    @Override
+    public float rho() {
+        return this.chemStack.rho();
+    }
+
+    @Override
+    public float V() {
+        return this.chemStack.V();
+    }
+
+    @Override
+    public MatterState state() {
+        return this.chemStack.state();
+    }
+
+    @Override
+    public float k() {
+        return this.chemStack.k();
+    }
 }
+
+

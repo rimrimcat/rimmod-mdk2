@@ -48,13 +48,13 @@ public class ChemicalTankBER implements BlockEntityRenderer<ChemicalTankBlockEnt
 
         ChemicalStackHandler chemHandler = blockEntity.getChemHandler();
 
-        if (chemHandler.getChemicalStack().isEmpty()) return;
-        if (!(chemHandler.getChemicalStack().state() == MatterState.LIQUID)) return;
+        if (chemHandler.chemStack().isEmpty()) return;
+        if (!(chemHandler.chemStack().state() == MatterState.LIQUID)) return;
 
         // LIQUIDS ONLY FOR NOW
         // TODO: VAPORS
         ResourceLocation stillTexture = IClientFluidTypeExtensions.of(Fluids.WATER).getStillTexture();
-        int color = chemHandler.getChemicalStack().chemical().color;
+        int color = chemHandler.chemStack().chemical().color;
         TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(stillTexture);
 
         VertexConsumer builder = bufferSource.getBuffer(RenderType.TRANSLUCENT);

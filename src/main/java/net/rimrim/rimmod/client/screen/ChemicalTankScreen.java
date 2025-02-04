@@ -95,7 +95,7 @@ public class ChemicalTankScreen extends AbstractContainerScreen<ChemicalTankMenu
                 this.topPos + 20 + (48 - fluidHeight),
                 this.leftPos + 125 + 16,
                 this.topPos + 20 + 48,
-                chemHandler.getChemicalStack().chemical().color
+                chemHandler.chemStack().chemical().color
         );
 
         this.renderTooltip(graphics, mouseX, mouseY);

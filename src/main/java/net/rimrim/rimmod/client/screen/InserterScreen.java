@@ -61,7 +61,7 @@ public class InserterScreen extends AbstractContainerScreen<InserterMenu> {
         super.render(graphics, mouseX, mouseY, partialTick);
 
         /*
-         * This method is added by the container screen to render
+         * This method is added by the stack screen to render
          * the tooltip of the hovered slot.
          */
         this.renderTooltip(graphics, mouseX, mouseY);

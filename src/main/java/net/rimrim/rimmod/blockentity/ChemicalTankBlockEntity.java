@@ -21,11 +21,12 @@ import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.capability.IFluidHandlerItem;
 import net.rimrim.rimmod.RimMod;
 import net.rimrim.rimmod.chem.Chemicals;
-import net.rimrim.rimmod.chem.container.ChemicalStack;
-import net.rimrim.rimmod.chem.container.ChemicalStackHandler;
+import net.rimrim.rimmod.chem.stack.ChemicalStack;
+import net.rimrim.rimmod.chem.stack.ChemicalStackHandler;
 import net.rimrim.rimmod.init.ModBlockEntities;
 import net.rimrim.rimmod.menu.itemhandler.TankItemHandler;
 import net.rimrim.rimmod.menu.ChemicalTankMenu;
+import net.rimrim.rimmod.transport.TransportHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -50,6 +51,8 @@ public class ChemicalTankBlockEntity extends BlockEntity implements MenuProvider
         }
     };
 
+    private final TransportHandler transHandler = new TransportHandler(chemHandler);
+
     private static final Component TITLE = Component.translatable("container." + RimMod.MODID + ".chemical_tank");
 
     public ChemicalTankBlockEntity(BlockPos pos, BlockState blockState) {
@@ -64,6 +67,10 @@ public class ChemicalTankBlockEntity extends BlockEntity implements MenuProvider
 
     public ChemicalStackHandler getChemHandler() {
         return this.chemHandler;
+    }
+
+    public TransportHandler getTransHandler() {
+        return this.transHandler;
     }
 
     public TankItemHandler getItemHandler() {
@@ -110,7 +117,7 @@ public class ChemicalTankBlockEntity extends BlockEntity implements MenuProvider
 
             this.sendUpdate();
 
-            RimMod.LOGGER.info("Expected container is {}", itemFluidHandler.getContainer());
+            RimMod.LOGGER.info("Expected stack is {}", itemFluidHandler.getContainer());
             RimMod.LOGGER.info("SUCCESS");
         }
 

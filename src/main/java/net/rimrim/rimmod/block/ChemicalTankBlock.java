@@ -8,6 +8,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.RenderShape;
@@ -27,9 +28,13 @@ public class ChemicalTankBlock extends Block implements EntityBlock {
 
     protected static final VoxelShape SHAPE = Block.box(2.0, 0.0, 2.0, 13.0, 13.0, 13.0);
 
-
     public ChemicalTankBlock(BlockBehaviour.Properties properties) {
         super(properties);
+    }
+
+    @Override
+    protected MapCodec<? extends Block> codec() {
+        return CODEC;
     }
 
     @Override
@@ -45,7 +50,6 @@ public class ChemicalTankBlock extends Block implements EntityBlock {
 
         return InteractionResult.SUCCESS;
     }
-
 
 
     @Override
@@ -69,4 +73,5 @@ public class ChemicalTankBlock extends Block implements EntityBlock {
     }
 
     // TODO: MENU AND TICKER
+
 }

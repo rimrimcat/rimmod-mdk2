@@ -54,7 +54,7 @@ public class DebugInserterBlockEntity extends BlockEntity  {
             DebugInserterBlockEntity.this.setChanged();
         }
     };
-    private static final Component TITLE = Component.translatable("container." + RimMod.MODID + ".debug_inserter");
+    private static final Component TITLE = Component.translatable("stack." + RimMod.MODID + ".debug_inserter");
 
     public DebugInserterBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.DEBUG_INSERTER.get(), pos, state);

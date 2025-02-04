@@ -27,6 +27,10 @@ import net.rimrim.rimmod.block.properties.InserterState;
 import net.rimrim.rimmod.init.ModBlocks;
 import net.rimrim.rimmod.init.ModItems;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 public class ModBlockModelProvider extends ModelProvider {
     public ModBlockModelProvider(PackOutput output) {
         super(output, RimMod.MODID);
@@ -37,7 +41,7 @@ public class ModBlockModelProvider extends ModelProvider {
         itemModels.generateFlatItem(ModItems.EXAMPLE_ITEM.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(ModItems.EXAMPLE_RAW.get(), ModelTemplates.FLAT_ITEM);
 
-        // Generate files
+
         blockModels.createTrivialCube(ModBlocks.EXAMPLE_BLOCK.get());
 
         blockModels.createHorizontallyRotatedBlock(ModBlocks.TANK.get(),
@@ -81,9 +85,30 @@ public class ModBlockModelProvider extends ModelProvider {
         customBlock(blockModels, ModBlocks.CHEMICAL_TANK);
 
 
+        // setUnsetBlocks(blockModels);
+    }
 
+    private void setUnsetBlocks(BlockModelGenerators blockModels) {
+        // Get a list of blocks without blockstates
+        for (DeferredHolder<Block, ? extends Block> holder : ModBlocks.BLOCKS.getEntries()) {
+            DeferredBlock<?> block = (DeferredBlock<?>) holder;
+
+            //
+            // if (block.get().getStateDefinition().getProperties().isEmpty()) {
+            //     RimMod.LOGGER.info("Detected empty state proeprties for {}", block);
+            //     // blocksWithoutStates.add(block);
+            // }
+            //
+            // block.get().getStateDefinition().getPossibleStates();
+
+            RimMod.LOGGER.info("Possible states of {} is {}", block, block.get());
+
+
+
+        }
 
     }
+
 
     private ResourceLocation getLoc(String registeredName) {
         int splitStart = RimMod.MODID.length() + 1;

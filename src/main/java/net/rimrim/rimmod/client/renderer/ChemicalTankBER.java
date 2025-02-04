@@ -2,7 +2,6 @@ package net.rimrim.rimmod.client.renderer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -13,13 +12,13 @@ import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.rimrim.rimmod.blockentity.ChemicalTankBlockEntity;
-import net.rimrim.rimmod.chem.container.ChemicalStackHandler;
+import net.rimrim.rimmod.chem.stack.ChemicalStackHandler;
+import net.rimrim.rimmod.chem.enums.MatterState;
 import org.joml.Quaternionf;
 
 public class ChemicalTankBER implements BlockEntityRenderer<ChemicalTankBlockEntity> {
@@ -48,19 +47,17 @@ public class ChemicalTankBER implements BlockEntityRenderer<ChemicalTankBlockEnt
         );
 
         ChemicalStackHandler chemHandler = blockEntity.getChemHandler();
-        int color = chemHandler.getChemicalStack().chemical().color;
 
         if (chemHandler.getChemicalStack().isEmpty()) return;
+        if (!(chemHandler.getChemicalStack().state() == MatterState.LIQUID)) return;
 
-        // LIQUIDS
-        IClientFluidTypeExtensions fluidTypeExtensions = IClientFluidTypeExtensions.of(Fluids.WATER);
-        ResourceLocation stillTexture = fluidTypeExtensions.getStillTexture();
-        // int color = fluidTypeExtensions.getTintColor();
-
+        // LIQUIDS ONLY FOR NOW
+        // TODO: VAPORS
+        ResourceLocation stillTexture = IClientFluidTypeExtensions.of(Fluids.WATER).getStillTexture();
+        int color = chemHandler.getChemicalStack().chemical().color;
         TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(stillTexture);
 
         VertexConsumer builder = bufferSource.getBuffer(RenderType.TRANSLUCENT);
-
         drawFull(builder, poseStack,
                 4 / 16f, 1 / 16f, 4 / 16f,
                 12 / 16f, (12 / 16f) * chemHandler.fillRatio(), 12 / 16f,
@@ -127,10 +124,6 @@ public class ChemicalTankBER implements BlockEntityRenderer<ChemicalTankBlockEnt
         float cy = y2;
         float cz = (z1 + z2) / 2;
 
-
-        float t = 0.01f;
-
-
         // TOP
         pose.pushPose();
         drawQuad(builder, pose,
@@ -143,7 +136,7 @@ public class ChemicalTankBER implements BlockEntityRenderer<ChemicalTankBlockEnt
         // +X
         pose.pushPose();
         pose.rotateAround(new Quaternionf(0, 0, -0.71, 0.71), cx, cy, cz); // rotate
-        pose.translate(dl/2, dl/2, 0); // move to side and adjust vert
+        pose.translate(dl / 2, dl / 2, 0); // move to side and adjust vert
         drawQuad(builder, pose,
                 x1, y2, z1, x1 + dy, y2, z2,
                 u1, v1, u2, v2,
@@ -154,7 +147,7 @@ public class ChemicalTankBER implements BlockEntityRenderer<ChemicalTankBlockEnt
         // -X
         pose.pushPose();
         pose.rotateAround(new Quaternionf(0, 0, 0.71, 0.71), cx, cy, cz);
-        pose.translate(dl/2, dl/2, 0); // move to side and adjust vert
+        pose.translate(dl / 2, dl / 2, 0); // move to side and adjust vert
         drawQuad(builder, pose,
                 x1 - dy, y2, z1, x1, y2, z2,
                 u1, v1, u2, v2,
@@ -165,9 +158,9 @@ public class ChemicalTankBER implements BlockEntityRenderer<ChemicalTankBlockEnt
         // +Z
         pose.pushPose();
         pose.rotateAround(new Quaternionf(0.71, 0, 0, 0.71), cx, cy, cz);
-        pose.translate(0, dl/2, dl/2); // move to side and adjust vert
+        pose.translate(0, dl / 2, dl / 2); // move to side and adjust vert
         drawQuad(builder, pose,
-                x1, y2, z1 , x2, y2, z1 + dy,
+                x1, y2, z1, x2, y2, z1 + dy,
                 u1, v1, u2, v2,
                 0, 1, 0,
                 light_pack, packedOverlay, color);
@@ -175,7 +168,7 @@ public class ChemicalTankBER implements BlockEntityRenderer<ChemicalTankBlockEnt
         // -Z
         pose.pushPose();
         pose.rotateAround(new Quaternionf(-0.71, 0, 0, 0.71), cx, cy, cz);
-        pose.translate(0, dl/2, dl/2); // move to side and adjust vert
+        pose.translate(0, dl / 2, dl / 2); // move to side and adjust vert
         drawQuad(builder, pose,
                 x1, y2, z1 - dy, x2, y2, z1,
                 u1, v1, u2, v2,

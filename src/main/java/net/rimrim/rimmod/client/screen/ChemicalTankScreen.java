@@ -7,7 +7,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.rimrim.rimmod.RimMod;
-import net.rimrim.rimmod.chem.container.ChemicalStackHandler;
+import net.rimrim.rimmod.chem.stack.ChemicalStackHandler;
 import net.rimrim.rimmod.menu.ChemicalTankMenu;
 
 public class ChemicalTankScreen extends AbstractContainerScreen<ChemicalTankMenu> {

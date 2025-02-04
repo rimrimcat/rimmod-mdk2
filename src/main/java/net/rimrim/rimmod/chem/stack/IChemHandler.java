@@ -1,10 +1,10 @@
-package net.rimrim.rimmod.chem.container;
+package net.rimrim.rimmod.chem.stack;
 
 public interface IChemHandler {
 
     /**
-     * Returns the volume of the container
-     * @return The volume of the container
+     * Returns the volume of the stack
+     * @return The volume of the stack
      */
     float getVolume();
 

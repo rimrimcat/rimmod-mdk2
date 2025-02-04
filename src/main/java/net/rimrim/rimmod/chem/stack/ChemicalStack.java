@@ -1,8 +1,9 @@
-package net.rimrim.rimmod.chem.container;
+package net.rimrim.rimmod.chem.stack;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.rimrim.rimmod.chem.correlation.type.base.IFunction;
+import net.rimrim.rimmod.chem.enums.MatterState;
 import net.rimrim.rimmod.chem.enums.VariableType;
 import net.rimrim.rimmod.chem.Chemicals;
 import net.rimrim.rimmod.chem.props.base.AbstractSpecies;
@@ -69,6 +70,10 @@ public class ChemicalStack {
 
     public float V() {
         return this.processVars.get(VOLUME);
+    }
+
+    public MatterState state() {
+        return this.chemical.state(processVars);
     }
 
 

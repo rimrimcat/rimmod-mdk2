@@ -24,7 +24,7 @@ public class Chemicals {
     public static AbstractSpecies WATER = new PureLiquidSpecies(new SpeciesBuilder()
             .name("water")
             .color(65, 107, 223)
-            .tags(ChemTags.WATER.toBuilder().liquidOnly().build())
+            .tags(ChemTags.WATER)
             .fromSmiles("O")
             .Tc(647.096)
             // Convert 322 kg/m3 to molar volume

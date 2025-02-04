@@ -8,7 +8,7 @@ public record ChemTags(boolean isWater,
                        MatterState[] validStates
 ) {
     public static ChemTags NONE = new Builder().build();
-    public static ChemTags WATER = new Builder().water().inorganic().build();
+    public static ChemTags WATER = new Builder().water().inorganic().liquidOnly().build();
 
     // TODO: isSolvent
 

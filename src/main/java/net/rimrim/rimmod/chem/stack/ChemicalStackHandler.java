@@ -1,4 +1,4 @@
-package net.rimrim.rimmod.chem.container;
+package net.rimrim.rimmod.chem.stack;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
@@ -7,6 +7,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.common.util.INBTSerializable;
 import net.rimrim.rimmod.RimMod;
 import net.rimrim.rimmod.chem.Chemicals;
+import net.rimrim.rimmod.chem.container.Cubic;
+import net.rimrim.rimmod.chem.container.IContainerShape;
 import net.rimrim.rimmod.chem.enums.VariableType;
 import net.rimrim.rimmod.chem.props.base.AbstractSpecies;
 import net.rimrim.rimmod.init.ModChemicals;
@@ -15,9 +17,9 @@ import java.util.EnumMap;
 
 public class ChemicalStackHandler implements INBTSerializable<CompoundTag> {
 
-    private float maxVolume; // m3
+    private IContainerShape container;
     private ChemicalStack chemStack;
-    private AbstractSpecies spaceFillingChemical;
+    private AbstractSpecies spaceFillingChemical; // unused for now
 
     // Is closed or not
     // Implicit that empty handler means filled with air
@@ -31,7 +33,7 @@ public class ChemicalStackHandler implements INBTSerializable<CompoundTag> {
     }
 
     public ChemicalStackHandler(AbstractSpecies spaceFiller, float volume) {
-        this.maxVolume = volume;
+        this.container = new Cubic(volume);
         this.spaceFillingChemical = spaceFiller;
         this.chemStack = ChemicalStack.EMPTY;
     }
@@ -44,21 +46,17 @@ public class ChemicalStackHandler implements INBTSerializable<CompoundTag> {
         return this.chemStack.processVars();
     }
 
-    public void setMaxVolume(float maxVolume) {
-        this.maxVolume = maxVolume;
-        this.onContentsChanged();
+    public float maxVolume() {
+        return container.volume();
     }
 
-    public float maxVolume() {
-        return this.maxVolume;
-    }
 
     public float getRemainingVolume() {
-        return (this.chemStack.isEmpty()) ? this.maxVolume : this.maxVolume - this.chemStack.V();
+        return (this.chemStack.isEmpty()) ? maxVolume() : maxVolume() - this.chemStack.V();
     }
 
     public float fillRatio() {
-        return this.chemStack.V() / maxVolume;
+        return this.chemStack.V() / maxVolume();
     }
 
     public float getRemainingMass() {
@@ -161,7 +159,7 @@ public class ChemicalStackHandler implements INBTSerializable<CompoundTag> {
         }
 
         if (requestedMass < this.chemStack.m()) {
-            // Can extract, with some remaining in container
+            // Can extract, with some remaining in stack
             if (!simulate) {
                 this.chemStack.deductMass(requestedMass);
                 this.onContentsChanged();

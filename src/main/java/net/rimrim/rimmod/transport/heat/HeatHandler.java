@@ -75,9 +75,8 @@ public class HeatHandler {
             return;
         }
 
-        float this_res = 0.5f / thisContainer.k() / thisContainer.shape().outer_face_surface_area(dir);
-        float other_res = 0.5f / otherContainer.k() / otherContainer.shape().outer_face_surface_area(dir.getOpposite());
-        float thermal_res = this_res + other_res;
+        float transfer_area = Math.min(thisContainer.shape().outer_face_surface_area(dir), otherContainer.shape().outer_face_surface_area(dir.getOpposite()));
+        float thermal_res = (0.5f / thisContainer.k() + 0.5f / otherContainer.k()) / transfer_area;
 
         float flux = -(T_B - T_A) / thermal_res;
 

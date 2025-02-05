@@ -2,6 +2,7 @@ package net.rimrim.rimmod.chem.props;
 
 import net.rimrim.rimmod.chem.correlation.type.UnsetProperty;
 import net.rimrim.rimmod.chem.correlation.type.base.IFunction;
+import net.rimrim.rimmod.util.ModNativeLoader;
 import org.lwjgl.system.Library;
 import org.openbabel.OBConversion;
 import org.openbabel.OBMol;
@@ -38,7 +39,10 @@ public class SpeciesBuilder {
     public IFunction liquid_vapor_pressure = new UnsetProperty();
 
     private void loadLib() {
-        Library.loadSystem("openbabel_java", "E:\\CloudStorage\\files\\Scripts\\rimmod-mdk2\\libs\\openbabel_java.dll");
+        ModNativeLoader.loadNativeLibrary();
+
+        // Library.loadSystem("openbabel_java", "E:\\CloudStorage\\files\\Scripts\\rimmod-mdk2\\libs\\openbabel_java.dll");
+        // Library.loadSystem("openbabel_java", "openbabel_java.dll");
         // TODO: FIX PATH
     }
 

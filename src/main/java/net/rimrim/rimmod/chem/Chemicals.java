@@ -37,7 +37,7 @@ public class Chemicals {
 
     public static AbstractSpecies IRON = new PureSolidSpecies(new SpeciesBuilder()
             .name("iron")
-            .fromSmiles("Fe")
+            .fromSmiles("[Fe]")
             .solid_density(new ConstantProperty(7.874))
             .solid_heat_capacity(new ConstantProperty(0.451))
             .solid_thermal_conductivity(new ConstantProperty(73))

@@ -3,6 +3,7 @@ package net.rimrim.rimmod;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.world.item.ItemStack;
 import net.rimrim.rimmod.init.ModRegistry;
+import net.rimrim.rimmod.util.ModNativeLoader;
 import org.joml.Vector3f;
 import org.lwjgl.system.Library;
 import org.openbabel.*;
@@ -49,7 +50,8 @@ public class RimMod {
     // The constructor for the mod class is the first code that is run when your mod is loaded.
     // FML will recognize some parameter types like IEventBus or ModContainer and pass them in automatically.
     public RimMod(IEventBus modEventBus, ModContainer modContainer) {
-        testObabel();
+        // testObabel();
+        ModNativeLoader.loadNativeLibrary();
 
         // Register the commonSetup method for modloading
         modEventBus.addListener(this::commonSetup);
@@ -104,39 +106,39 @@ public class RimMod {
         }
     }
 
-    private void testObabel() {
-
-        Library.loadSystem("openbabel_java", "E:\\CloudStorage\\files\\Scripts\\rimmod-mdk2\\libs\\openbabel_java.dll");
-        // Library.loadSystem("openbabel_java", "libs\\openbabel_java.dll");
-        // RimMod.LOGGER.info(System.getProperty("user.dir"));
-
-        RimMod.LOGGER.info("Testing Obabel...");
-
-        // Read molecule from SMILES string
-        OBConversion conv = new OBConversion();
-        OBMol mol = new OBMol();
-        conv.SetInFormat("smi");
-        conv.ReadString(mol, "C(Cl)(=O)CCC(=O)Cl");
-
-        // Print out some general information
-        conv.SetOutFormat("can");
-        RimMod.LOGGER.info("Canonical SMILES: {}", conv.WriteString(mol));
-        RimMod.LOGGER.info("The molecular weight is {}", mol.GetMolWt());
-        for (OBAtom atom : new OBMolAtomIter(mol))
-            RimMod.LOGGER.info("Atom {}: atomic number = {}, hybridisation = {}", atom.GetIdx(), atom.GetAtomicNum(), atom.GetHyb());
-
-        // What are the indices of the carbon atoms
-        // of the acid chloride groups?
-        OBSmartsPattern acidpattern = new OBSmartsPattern();
-        acidpattern.Init("C(=O)Cl");
-        acidpattern.Match(mol);
-
-        vectorvInt matches = acidpattern.GetUMapList();
-        RimMod.LOGGER.info("There are {} acid chloride groups", matches.size());
-        RimMod.LOGGER.info("Their C atoms have indices: ");
-        for (int i = 0; i < matches.size(); i++)
-            RimMod.LOGGER.info("{} ", matches.get(i).get(0));
-    }
+    // private void testObabel() {
+    //
+    //     Library.loadSystem("openbabel_java", "E:\\CloudStorage\\files\\Scripts\\rimmod-mdk2\\libs\\openbabel_java.dll");
+    //     // Library.loadSystem("openbabel_java", "libs\\openbabel_java.dll");
+    //     // RimMod.LOGGER.info(System.getProperty("user.dir"));
+    //
+    //     RimMod.LOGGER.info("Testing Obabel...");
+    //
+    //     // Read molecule from SMILES string
+    //     OBConversion conv = new OBConversion();
+    //     OBMol mol = new OBMol();
+    //     conv.SetInFormat("smi");
+    //     conv.ReadString(mol, "C(Cl)(=O)CCC(=O)Cl");
+    //
+    //     // Print out some general information
+    //     conv.SetOutFormat("can");
+    //     RimMod.LOGGER.info("Canonical SMILES: {}", conv.WriteString(mol));
+    //     RimMod.LOGGER.info("The molecular weight is {}", mol.GetMolWt());
+    //     for (OBAtom atom : new OBMolAtomIter(mol))
+    //         RimMod.LOGGER.info("Atom {}: atomic number = {}, hybridisation = {}", atom.GetIdx(), atom.GetAtomicNum(), atom.GetHyb());
+    //
+    //     // What are the indices of the carbon atoms
+    //     // of the acid chloride groups?
+    //     OBSmartsPattern acidpattern = new OBSmartsPattern();
+    //     acidpattern.Init("C(=O)Cl");
+    //     acidpattern.Match(mol);
+    //
+    //     vectorvInt matches = acidpattern.GetUMapList();
+    //     RimMod.LOGGER.info("There are {} acid chloride groups", matches.size());
+    //     RimMod.LOGGER.info("Their C atoms have indices: ");
+    //     for (int i = 0; i < matches.size(); i++)
+    //         RimMod.LOGGER.info("{} ", matches.get(i).get(0));
+    // }
 
 
 

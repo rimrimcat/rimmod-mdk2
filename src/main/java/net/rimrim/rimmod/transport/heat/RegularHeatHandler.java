@@ -4,12 +4,11 @@ import net.minecraft.core.Direction;
 import net.rimrim.rimmod.chem.container.ChemContainer;
 import net.rimrim.rimmod.chem.enums.ProcessVariableType;
 import net.rimrim.rimmod.chem.stack.ChemicalStackHandler;
-import net.rimrim.rimmod.transport.ITransportHandler;
 import net.rimrim.rimmod.transport.TransportHandler;
 
 import java.util.Iterator;
 
-public class HeatHandler {
+public class RegularHeatHandler implements IHeatHandler {
 
 
     private final TransportHandler transHandler;
@@ -18,7 +17,9 @@ public class HeatHandler {
     private int nextConvect;
     private int nextRadiate;
 
-    public HeatHandler(TransportHandler transHandler) {
+    // TODO: GET STEP SIZE FROM TEMP DIFFERENCE
+
+    public RegularHeatHandler(TransportHandler transHandler) {
         this.transHandler = transHandler;
     }
 
@@ -26,10 +27,6 @@ public class HeatHandler {
         return this.transHandler;
     }
 
-    /**
-     * Conducts heat to chemical inside container.
-     * Uses simple series conduction through flat slab
-     */
     public void conductHeatToChemical() {
         if (this.transHandler.chemHandler() == null) return;
         if (this.transHandler.chemHandler().chemStack().isEmpty()) return;
@@ -58,13 +55,8 @@ public class HeatHandler {
         container.mapIncrement(ProcessVariableType.TEMPERATURE, flux * 0.1f / mC_B);
     }
 
-    /**
-     * Conducts heat to other blocks
-     * Uses simple series conduction through flat slab
-     *
-     * @param otherHandler: HeatHandler of the other block
-     */
-    public void conductHeatToNeighbor(HeatHandler otherHandler, Direction dir) {
+
+    public void conductHeatToNeighbor(RegularHeatHandler otherHandler, Direction dir) {
         // Conduction to neighbor should strictly only be from high temp to low temp
         ChemContainer thisContainer = this.transHandler.chemHandler().container();
         ChemContainer otherContainer = otherHandler.transHandler.chemHandler().container();

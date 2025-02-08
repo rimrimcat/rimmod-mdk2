@@ -98,6 +98,7 @@ neoForge {
             logLevel = org.slf4j.event.Level.DEBUG
 
             systemProperty 'java.library.path', 'libs/'
+            systemProperty 'org.lwjgl.util.Debug', 'true'
         }
     }
 
@@ -154,8 +155,9 @@ dependencies {
 //    additionalRuntimeClasspath "org.openscience.cdk:cdk-bundle:2.9"
 //    implementation(files("libs/openbabel.jar"))
 
-    jarJar(implementation(files("libs/openbabel-3.1.1.jar")))
-    additionalRuntimeClasspath(files("libs/openbabel-3.1.1.jar"))
+
+    jarJar(implementation(files("libs/openbabel.jar")))
+    additionalRuntimeClasspath(files("libs/openbabel.jar"))
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.
@@ -218,10 +220,10 @@ tasks.named('processResources') {
     }
 }
 
-jar {
-    manifest {
-        attributes(
-                'Class-Path': 'META-INF/jarjar/openbabel-3.1.1.jar'
-        )
-    }
-}
+//jar {
+//    manifest {
+//        attributes(
+//                'Class-Path': 'META-INF/jarjar/openbabel-3.1.1.jar'
+//        )
+//    }
+//}

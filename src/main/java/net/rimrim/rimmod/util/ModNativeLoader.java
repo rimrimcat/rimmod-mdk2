@@ -7,14 +7,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.invoke.MethodHandle;
-import java.lang.invoke.MethodHandles;
-import java.lang.invoke.MethodType;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLClassLoader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -28,7 +20,6 @@ public class ModNativeLoader {
     public static void loadNativeLibrary() {
         if (loaded) return;
 
-
         try {
 
             cleanTemps();
@@ -40,16 +31,12 @@ public class ModNativeLoader {
 
             // Extract files to the temporary directory
             File nativeLib = new File(tempDir.toFile(), DLL_NAME);
-            // File jarLib = new File(tempDir.toFile(), JAR_NAME);
 
             copyDepTo("/deps/" + DLL_NAME, nativeLib);
-            // copyDepTo("/deps/" + JAR_NAME, jarLib);
-
 
             // Load the DLL
             Library.loadSystem("openbabel_java", nativeLib.getAbsolutePath());
             loaded = true;
-
 
             RimMod.LOGGER.info("Openbabel successfully loaded!");
             RimMod.LOGGER.info("Classpath: {}", System.getProperty("java.class.path"));
